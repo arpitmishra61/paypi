@@ -6,6 +6,9 @@
     "jotai": "^2.15.2"
   },
   "exports": {
-    "./useBalance": "./src/hooks/useBalance.ts"
+    "./userAtom": "./src/atoms/userAtom.ts",
+    "./balanceAtom": "./src/atoms/balanceAtom.ts",
+    "./useBalance": "./src/hooks/useBalance.ts",
+    "./useUser": "./src/hooks/useUser.ts"
   }
 }

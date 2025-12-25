@@ -1,28 +1,81 @@
-generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
-}
-
 datasource db {
   provider = "postgresql"
 }
 
+generator client {
+  provider = "prisma-client"
+  output   = "./generated"
+}
+
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String? @unique
-  name     String?
-  number   String  @unique
-  password String
+  id              Int              @id @default(autoincrement())
+  email           String?          @unique
+  name            String?
+  phone           String           @unique
+  password        String
+  balance         Balance?
+  transactions    AppTransaction[]
+  p2Ptransactions P2PTransaction[]
 }
 
-model Merchant {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  name      String?
-  auth_type AuthType
+model Balance {
+  id     Int  @id @default(autoincrement())
+  amount Int
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
 }
 
-enum AuthType {
-  Google
-  Github
+model AppTransaction {
+  id        Int                  @id @default(autoincrement())
+  userId    Int
+  amount    Int
+  type      TransactionType
+  direction TransactionDirection
+  status    TransactionStatus
+  createdAt DateTime             @default(now())
+  user      User                 @relation(fields: [userId], references: [id])
+  onRamp    OnRampTransaction?
+  p2p       P2PTransaction?
+
+  @@index([userId, createdAt])
+}
+
+model Bank {
+  id                 Int                 @id @default(autoincrement())
+  name               String
+  logoUrl            String
+  onRampTransactions OnRampTransaction[]
+}
+
+model OnRampTransaction {
+  id            Int            @id @default(autoincrement())
+  transactionId Int            @unique
+  bank          Bank           @relation(fields: [bankId], references: [id])
+  token         String         @unique
+  transaction   AppTransaction @relation(fields: [transactionId], references: [id])
+  bankId        Int
+}
+
+model P2PTransaction {
+  id            Int            @id @default(autoincrement())
+  transactionId Int            @unique
+  otherUserId   Int
+  transaction   AppTransaction @relation(fields: [transactionId], references: [id])
+  otherUser     User           @relation(fields: [otherUserId], references: [id])
+}
+
+enum TransactionType {
+  ON_RAMP
+  P2P
+}
+
+enum TransactionDirection {
+  CREDIT
+  DEBIT
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCESS
+  FAILED
 }

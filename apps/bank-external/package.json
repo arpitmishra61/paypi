@@ -1,0 +1,15 @@
+{
+  "name": "bank-payment-portal",
+  "version": "1.0.0",
+  "description": "A simple bank payment portal with OTP",
+  "main": "index.html",
+  "scripts": {
+    "dev": "concurrently \"live-server icici --port=3002\" \"live-server axis --port=3003\""
+  },
+  "author": "Arpit Mishra",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "concurrently": "^9.2.1"
+  }
+}

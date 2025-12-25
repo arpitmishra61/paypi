@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="./logo.jpg" />
+    <title>Axis Bank - OTP Verification</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        background: #f5f6fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+      }
+
+      .container {
+        background: #fff;
+        border-radius: 12px;
+        padding: 30px 40px;
+        width: 360px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      .logo {
+        font-size: 24px;
+        font-weight: 700;
+        color: #ae285d;
+        margin-bottom: 18px;
+      }
+
+      h2 {
+        font-size: 20px;
+        color: #333;
+        margin-bottom: 6px;
+      }
+
+      p {
+        font-size: 14px;
+        color: #555;
+        margin-bottom: 20px;
+      }
+
+      .otp-input {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+      }
+
+      .otp-input input {
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+        text-align: center;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        transition: 0.2s;
+      }
+
+      .otp-input input:focus {
+        border-color: #ae285d;
+        outline: none;
+        box-shadow: 0 0 6px rgba(0, 119, 200, 0.3);
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        background: #ae285d;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      button:hover {
+        background: #ae285d;
+      }
+
+      .resend {
+        margin-top: 14px;
+        font-size: 13px;
+        color: #ae285d;
+        cursor: pointer;
+      }
+      .logo-img {
+        width: 80px;
+
+        border-radius: 50%;
+        position: relative;
+        top: -60px;
+      }
+
+      .resend:hover {
+        text-decoration: underline;
+      }
+      .faded {
+        background-color: gray;
+        cursor: not-allowed;
+      }
+      .faded:hover {
+        background-color: gray;
+        cursor: not-allowed;
+      }
+      .message {
+        font-size: 14px;
+        margin-top: 16px;
+        font-weight: bold;
+        margin-bottom: 20px;
+      }
+      .success {
+        color: green;
+      }
+      .error {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img src="./logo.jpg" class="logo-img" alt="" />
+      <h2>Verify OTP</h2>
+      <p>
+        We have sent you a one‑time password (OTP) to your registered mobile
+        number.
+      </p>
+
+      <form id="otpForm">
+        <div class="otp-input">
+          <input type="text" maxlength="1" />
+          <input type="text" maxlength="1" />
+          <input type="text" maxlength="1" />
+          <input type="text" maxlength="1" />
+        </div>
+        <div id="message" class="message"></div>
+        <button type="submit" id="s-btn" class="faded" disabled>
+          Verify & Continue
+        </button>
+      </form>
+
+      <div class="resend">Resend OTP</div>
+    </div>
+
+    <script>
+      const otpForm = document.getElementById("otpForm");
+      const url = new URL(window.location.href);
+      const button = document.querySelector("#s-btn");
+      const messageEl = document.getElementById("message");
+
+      const userId = url.searchParams.get("userId");
+      const token = url.searchParams.get("token");
+      const amount = url.searchParams.get("amount");
+      otpForm.addEventListener("submit", function (e) {
+        e.preventDefault(); // Prevent page reload
+        let otp = "";
+        const inputs = document.querySelectorAll(".otp-input input");
+        inputs.forEach((input) => {
+          otp += input.value;
+        });
+        console.log("otp", otp);
+        // Fake OTP check
+        if (otp === "1234") {
+          fetch("http://localhost:5000/web-hook", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              amount,
+              userId,
+              token,
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log("Success:", data);
+              messageEl.textContent =
+                "🎉 Payment successful! This tab will be closed in few secs";
+              messageEl.classList.remove("error");
+              messageEl.className = "message success";
+              setTimeout(() => {
+                window.close();
+              }, 3000);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        } else {
+          messageEl.textContent = "❌ OTP is wrong — Payment failed.";
+          messageEl.className = "message error";
+        }
+      });
+      window.addEventListener("DOMContentLoaded", () => {
+        const inputs = document.querySelectorAll(".otp-input input");
+        inputs.forEach((input, i) => {
+          input.addEventListener("input", () => {
+            if (input.value.length === 1 && i < inputs.length - 1) {
+              inputs[i + 1].focus();
+            }
+            if (inputs.length === 4) {
+              button.classList.remove("faded");
+              button.disabled = false;
+            } else {
+              if (!button.classList.contains("faded")) {
+                button.classList.add("faded");
+              }
+            }
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

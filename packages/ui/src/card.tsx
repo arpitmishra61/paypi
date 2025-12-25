@@ -9,19 +9,20 @@ export function Card({
   className?: string;
   title: string;
   children: React.ReactNode;
-  href: string;
+  href?: string;
 }): JSX.Element {
   return (
-    <a
-      className={className}
-      href={`${href}?utm_source=create-turbo&utm_medium=basic&utm_campaign=create-turbo"`}
-      rel="noopener noreferrer"
-      target="_blank"
-    >
-      <h2>
-        {title} <span>-&gt;</span>
-      </h2>
-      <p>{children}</p>
-    </a>
+    <div className="rounded-lg bg-white shadow-md hover:shadow-lg transition p-6">
+      <a
+        className={className}
+        rel="noopener noreferrer"
+        target="_blank"
+      >
+        <h2>
+          {title} <span>-&gt;</span>
+        </h2>
+        <p>{children}</p>
+      </a>
+    </div>
   );
 }

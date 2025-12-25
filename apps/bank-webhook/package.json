@@ -1,0 +1,21 @@
+{
+  "name": "bank-webhook",
+  "version": "1.0.0",
+  "description": "A simple webhook merchant can hit",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "tsx --watch server.ts"
+  },
+  "author": "Arpit",
+  "license": "ISC",
+  "dependencies": {
+    "@types/express": "^5.0.6",
+    "cors": "^2.8.5",
+    "esbuild": "^0.27.1",
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19"
+  }
+}
