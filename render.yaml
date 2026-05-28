@@ -33,6 +33,7 @@ services:
   - type: web
     name: bank-webhook
     runtime: node
+    plan: free # ← won't be charged
     rootDir: apps/bank-webhook
     buildCommand: cd ../.. && npm install && npx turbo run build --filter=@repo/bank-webhook
     startCommand: node src/index.js
@@ -45,13 +46,12 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 10000
 
   # ── user-app (Next.js) ────────────────────────────────
   - type: web
     name: user-app
     runtime: node
+    plan: free # ← won't be charged
     rootDir: apps/user-app
     buildCommand: cd ../.. && npm install && npx turbo run build --filter=@repo/user-app
     startCommand: npm start
@@ -64,5 +64,3 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: NEXT_PUBLIC_WEBHOOK_URL
-        value: https://bank-webhook.onrender.com
