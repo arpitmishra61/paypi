@@ -36,7 +36,7 @@ services:
     plan: free
     rootDir: apps/bank-webhook
     buildCommand: cd ../.. && npm install && npx turbo run build --filter=bank-webhook
-    startCommand: node src/server.js
+    startCommand: node dist/server.js
     buildFilter:
       paths:
         - apps/bank-webhook/**
