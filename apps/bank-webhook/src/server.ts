@@ -5,7 +5,6 @@ import cors from "cors";
 
 const app = express();
 app.use(express.json());
-console.log("hello");
 app.use(cors());
 
 app.post("/web-hook", async (req, res) => {
