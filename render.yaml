@@ -33,9 +33,9 @@ services:
   - type: web
     name: bank-webhook
     runtime: node
-    plan: free # ← won't be charged
+    plan: free
     rootDir: apps/bank-webhook
-    buildCommand: cd ../.. && npm install && npx turbo run build --filter=@repo/bank-webhook
+    buildCommand: cd ../.. && npm install && npx turbo run build --filter=bank-webhook
     startCommand: node src/index.js
     buildFilter:
       paths:
@@ -51,7 +51,7 @@ services:
   - type: web
     name: user-app
     runtime: node
-    plan: free # ← won't be charged
+    plan: free
     rootDir: apps/user-app
     buildCommand: cd ../.. && npm install && npx turbo run build --filter=@repo/user-app
     startCommand: npm start
