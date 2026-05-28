@@ -5,6 +5,10 @@ import { Separator } from "@/components/ui/separator"
 import { getUserTransactions } from "@/app/lib/actions/getTranscations";
 import { useEffect, useState } from "react";
 import { TransactionSkeleton } from "./skeleton/Transactions";
+import Image from "next/image";
+import axisLogo from "@/logo/axis.jpg"
+import iciciLogo from "@/logo/icici.png"
+
 
 type Transaction = {
     id: number;
@@ -31,10 +35,15 @@ type P2P = {
         phone: string;
     };
 };
-const banks = { 1: { name: "ICICI Bank" }, 2: { name: "Axis Bank" } }
+const banks = { 1: { name: "ICICI Bank", img: axisLogo, alt: "icici-logo" }, 2: { name: "Axis Bank", img: axisLogo, alt: "axis-logo" } }
 function getName(t: Transaction) {
     const onRamp = t.onRamp
-    return onRamp ? banks[onRamp.bankId].name : t.p2p?.otherUser.name
+    if (onRamp) {
+        const bank = banks[onRamp.bankId]
+        return <>{bank.name}{<Image src={bank.img} alt={bank.alt} width={16} height={16}></Image>}</>
+    }
+
+    return t.p2p?.otherUser.name ?? "Unknown"
 }
 
 export default function ({ userId, from, to }: { userId: string, from: number, to: number }) {
@@ -74,8 +83,8 @@ export default function ({ userId, from, to }: { userId: string, from: number, t
 
                         <div>
                             <p className="text-sm font-small">{t.direction}</p>
-                            <p className="text-xs text-muted-foreground">
-                                {(isDebit ? "To " : "From ") + getName(t)}
+                            <p className="text-xs text-muted-foreground flex gap-1">
+                                <>{(isDebit ? "To " : "From ")} {getName(t)}</>
                             </p>
 
                         </div>

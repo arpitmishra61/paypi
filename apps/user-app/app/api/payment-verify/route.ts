@@ -52,3 +52,9 @@ export async function GET(req: Request) {
     );
   }
 }
+
+/* Alternative approach is after verify token just tell the bank make post request that payment is done push the message 
+to the message queue don't do db transaction here bcz bank need quick response.
+Then a db worker pull msg seq from queue and make db transactions.
+Frontend will make a api call (POOL) or web socket (PUB/SUB) to chek the db for transaction done or not
+*/

@@ -1,0 +1,68 @@
+services:
+  # ── bank-external: axis ───────────────────────────────
+  - type: web
+    name: bank-external-axis
+    runtime: static
+    rootDir: apps/bank-external
+    buildCommand: echo "No build needed"
+    staticPublishPath: ./axis
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    buildFilter:
+      paths:
+        - apps/bank-external/axis/**
+
+  # ── bank-external: icici ──────────────────────────────
+  - type: web
+    name: bank-external-icici
+    runtime: static
+    rootDir: apps/bank-external
+    buildCommand: echo "No build needed"
+    staticPublishPath: ./icici
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    buildFilter:
+      paths:
+        - apps/bank-external/icici/**
+
+  # ── bank-webhook (Node.js) ────────────────────────────
+  - type: web
+    name: bank-webhook
+    runtime: node
+    rootDir: apps/bank-webhook
+    buildCommand: cd ../.. && npm install && npx turbo run build --filter=@repo/bank-webhook
+    startCommand: node src/index.js
+    buildFilter:
+      paths:
+        - apps/bank-webhook/**
+        - packages/**
+        - turbo.json
+        - package.json
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+
+  # ── user-app (Next.js) ────────────────────────────────
+  - type: web
+    name: user-app
+    runtime: node
+    rootDir: apps/user-app
+    buildCommand: cd ../.. && npm install && npx turbo run build --filter=@repo/user-app
+    startCommand: npm start
+    buildFilter:
+      paths:
+        - apps/user-app/**
+        - packages/**
+        - turbo.json
+        - package.json
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_WEBHOOK_URL
+        value: https://bank-webhook.onrender.com

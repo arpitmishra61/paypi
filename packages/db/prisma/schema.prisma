@@ -14,8 +14,8 @@ model User {
   phone           String           @unique
   password        String
   balance         Balance?
-  transactions    AppTransaction[]
   p2Ptransactions P2PTransaction[]
+  appTransactions AppTransaction[]
 }
 
 model Balance {
