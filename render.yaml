@@ -49,7 +49,7 @@ services:
 
   # ── user-app (Next.js) ────────────────────────────────
   - type: web
-    name: user-app
+    name: paypi
     runtime: node
     plan: free
     rootDir: apps/user-app
