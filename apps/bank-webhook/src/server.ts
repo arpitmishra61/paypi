@@ -58,6 +58,10 @@ app.post("/web-hook", async (req, res) => {
       }));
   }
 });
+
+app.get("/", (req, res) => {
+  res.send("Webhook is running");
+});
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log("Webhook Started on the port ", PORT);
