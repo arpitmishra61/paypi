@@ -1,0 +1,13 @@
+services:
+  app1:
+    build:
+      context: .                    # root context (access to packages/)
+      dockerfile: Dockerfile   # which dockerfile to use
+    container_name: bank-webhook
+    restart: always
+    mem_limit: 512m
+    cpus: 0.5
+    ports:
+      - "5000:5000"
+    env_file:
+      - apps/bank-webhook/.env
