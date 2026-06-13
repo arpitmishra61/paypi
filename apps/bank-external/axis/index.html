@@ -157,6 +157,12 @@
       const url = new URL(window.location.href);
       const button = document.querySelector("#s-btn");
       const messageEl = document.getElementById("message");
+      const isLocal =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1";
+      const domain = isLocal
+        ? "http://localhost:5000/web-hook"
+        : "http://paypiwebhook.devinsight.in/webhook";
 
       const userId = url.searchParams.get("userId");
       const token = url.searchParams.get("token");
@@ -171,7 +177,7 @@
         console.log("otp", otp);
         // Fake OTP check
         if (otp === "1234") {
-          fetch("http://localhost:5000/web-hook", {
+          fetch(domain, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

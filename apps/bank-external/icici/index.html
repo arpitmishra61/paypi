@@ -161,6 +161,12 @@
       const userId = url.searchParams.get("userId");
       const token = url.searchParams.get("token");
       const amount = url.searchParams.get("amount");
+      const isLocal =
+        window.location.hostname === "localhost" ||
+        window.location.hostname === "127.0.0.1";
+      const domain = isLocal
+        ? "http://localhost:5000/web-hook"
+        : "http://paypiwebhook.devinsight.in/webhook";
       otpForm.addEventListener("submit", function (e) {
         e.preventDefault(); // Prevent page reload
         let otp = "";
