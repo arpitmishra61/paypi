@@ -162,7 +162,7 @@
         window.location.hostname === "127.0.0.1";
       const domain = isLocal
         ? "http://localhost:5000/web-hook"
-        : "https://paypi-bank-webhook.vercel.app/webhook";
+        : "https://paypi-bank-webhook.vercel.app/web-hook";
 
       const userId = url.searchParams.get("userId");
       const token = url.searchParams.get("token");
