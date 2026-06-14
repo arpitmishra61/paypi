@@ -63,7 +63,8 @@ export function AddMoneyTab() {
 
     return (
         <div className="space-y-6">
-
+            <h2 className="text-sm font-medium mb-2">Topup Balance</h2>
+            <hr />
             {/* Current Balance */}
             <div className="text-sm text-muted-foreground">
                 Current Balance:{" "}

@@ -59,12 +59,25 @@ export default function () {
                         </Button>
                     </div>
                     <Card className="max-w-md mx-auto text-center">
-                        <CardContent className="pt-6 space-y-4">
+                        <CardContent className="space-y-1">
                             <p className="text-sm text-muted-foreground">
                                 You are not registered?
                             </p>
                             <Button asChild variant="link" className="p-0">
                                 <Link href="/signup">Register</Link>
+
+                            </Button>
+                            <br />
+
+                            <Button variant="link" className="p-0" onClick={async () => {
+                                await signIn("credentials", {
+                                    phone: "1111111111",
+                                    password: "password123",
+                                    callbackUrl: "/dashboard",
+                                });
+
+                            }}>
+                                Login As Guest (For Testing)
                             </Button>
                         </CardContent>
                     </Card>

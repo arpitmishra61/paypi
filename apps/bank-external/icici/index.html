@@ -177,7 +177,7 @@
         console.log("otp", otp);
         // Fake OTP check
         if (otp === "1234") {
-          fetch("http://localhost:5000/web-hook", {
+          fetch(domain, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

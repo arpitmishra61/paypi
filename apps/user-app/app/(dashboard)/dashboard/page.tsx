@@ -33,7 +33,7 @@ export default async function WalletCard() {
     }
 
     return (
-        <Card className="w-[480px] rounded-2xl shadow-lg dashboard">
+        <Card className="w-[480px] rounded-2xl shadow-lg dashboard max-w-sm">
             {/* Logo */}
             <CardHeader className="flex items-center justify-center py-1">
                 <div className="flex items-center gap-0.5 text-xl font-bold">
