@@ -31,7 +31,7 @@ export function AddMoneyTab() {
         },
         "axis": {
             name: "Axis Bank",
-            redirectUrl: isProd ? "https ://paypi-axis-bank.vercel.app/" : "http://localhost:3003/",
+            redirectUrl: isProd ? "https://paypi-bank-icici.vercel.app/" : "http://localhost:3003/",
             img: "https://vectorseek.com/wp-content/uploads/2021/12/Axis-Bank-Logo-Vector.png",
             val: "axis",
             id: 2
