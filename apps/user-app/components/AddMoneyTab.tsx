@@ -24,14 +24,14 @@ export function AddMoneyTab() {
     const SUPPORTED_BANKS = useMemo(() => ({
         "icici": {
             name: "ICICI Bank",
-            redirectUrl: isProd ? "https://paypi-axis-bank.vercel.app/" : "http://localhost:3002/",
+            redirectUrl: isProd ? "https://paypi-bank-icici.vercel.app/" : "http://localhost:3002/",
             img: "https://upload.wikimedia.org/wikipedia/commons/1/12/ICICI_Bank_Logo.svg",
             val: "icici",
             id: 1
         },
         "axis": {
             name: "Axis Bank",
-            redirectUrl: isProd ? "https://paypi-bank-icici.vercel.app/" : "http://localhost:3003/",
+            redirectUrl: isProd ? "https://paypi-axis-bank.vercel.app/" : "http://localhost:3003/",
             img: "https://vectorseek.com/wp-content/uploads/2021/12/Axis-Bank-Logo-Vector.png",
             val: "axis",
             id: 2
