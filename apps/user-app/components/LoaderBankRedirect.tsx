@@ -71,14 +71,14 @@ export default function RedirectingScreen({ bank, amount, user }: any) {
     }
     return (
         <div className="flex min-h-screen items-center justify-center bg-muted/30 absolute top-4">
-            <Card className="md:w-[430px] rounded-2xl shadow-lg">
+            <Card className="w-[330px] rounded-2xl shadow-lg">
                 <CardContent className="flex flex-col items-center gap-4 py-8">
 
                     {/* Loader */}
                     <Loader2 className="h-10 w-10 animate-spin text-primary" />
 
                     {/* Heading */}
-                    <h2 className="text-lg font-semibold">
+                    <h2 className="text-lg font-semibold text-center">
                         {done ? 'Payment is in progess on bank portal' : 'Redirecting to Bank Portal'}
                     </h2>
 

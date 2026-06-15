@@ -22,8 +22,8 @@ export default function PaymentStatus({ status }: any) {
         return () => clearInterval(interval)
     }, [count, router])
     return (
-        <div className="flex min-h-screen items-center justify-center bg-muted/95 px-4 absolute top-0">
-            <Card className=" w-[400px] text-center py-8 shadow-lg rounded-xl">
+        <div className="flex min-h-screen items-center justify-center bg-muted/30 absolute top-4">
+            <Card className="w-[330px] text-center py-8 shadow-lg rounded-xl">
                 {status === "SUCCESS" ? <CardContent className="flex flex-col items-center gap-4">
 
                     <CheckCircle2 className="h-12 w-12 text-green-600" />
