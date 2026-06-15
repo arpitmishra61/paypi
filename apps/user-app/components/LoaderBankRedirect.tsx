@@ -71,7 +71,7 @@ export default function RedirectingScreen({ bank, amount, user }: any) {
     }
     return (
         <div className="flex min-h-screen items-center justify-center bg-muted/30 absolute top-4">
-            <Card className="w-[430px] rounded-2xl shadow-lg">
+            <Card className="md:w-[430px] rounded-2xl shadow-lg">
                 <CardContent className="flex flex-col items-center gap-4 py-8">
 
                     {/* Loader */}
