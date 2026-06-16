@@ -27,10 +27,11 @@ export const authOptions = {
         });
 
         if (existingUser) {
-          console.log(existingUser);
-          const passwordValidation =
-            true ||
-            (await bcrypt.compare(credentials.password, existingUser.password));
+          const passwordValidation = await bcrypt.compare(
+            credentials.password,
+            hashedPassword,
+          );
+
           if (passwordValidation) {
             return {
               id: existingUser.id.toString(),
@@ -40,24 +41,6 @@ export const authOptions = {
             };
           }
           return null;
-        }
-
-        try {
-          const user = await db.user.create({
-            data: {
-              phone: credentials.phone,
-              password: hashedPassword,
-            },
-          });
-
-          return {
-            id: user.id.toString(),
-            name: user.name,
-            email: user.email,
-          };
-        } catch (e: any) {
-          console.log("some error", e.message);
-          console.error(e);
         }
 
         return null;

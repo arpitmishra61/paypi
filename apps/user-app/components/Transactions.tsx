@@ -8,6 +8,7 @@ import { TransactionSkeleton } from "./skeleton/Transactions";
 import Image from "next/image";
 import axisLogo from "@/logo/axis.jpg"
 import iciciLogo from "@/logo/icici.png"
+import { Card } from "@repo/ui/card";
 
 
 type Transaction = {
@@ -47,19 +48,25 @@ function getName(t: Transaction) {
 }
 
 export default function ({ userId, from, to }: { userId: string, from: number, to: number }) {
-    const [transactions, setTransactions] = useState<Transaction[]>([])
-    const totalTransactions = transactions.length
+    const [transactions, setTransactions] = useState<null | Transaction[]>([])
+    const totalTransactions = transactions?.length
     useEffect(() => {
         getUserTransactions({ userId, from, to }).then(t => setTransactions(t))
     }, [])
-    if (!transactions.length) {
-        return <TransactionSkeleton count={to - from + 1} />
+    if (!transactions) {
+        return <TransactionSkeleton count={to - from} />
     }
+    else if (transactions.length === 0)
+        return <div className="card flex justify-center">
+            <p className="text-sm font-small">No Recent Transactions</p>
+
+
+        </div>
 
     return <div>
         <div className="flex items-center justify-between mb-3">
             <p className="font-semibold">Recent Transactions</p>
-            <Badge variant="secondary">{to - from + 1}</Badge>
+            <Badge variant="secondary">{to - from}</Badge>
         </div>
 
         <div className="space-y-3">

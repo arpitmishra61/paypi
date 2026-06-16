@@ -3,17 +3,19 @@
 import { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { Check } from "lucide-react"
+import { Check, Loader2, LoaderCircle, LoaderCircleIcon, LoaderPinwheel } from "lucide-react"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
+import { signIn } from "next-auth/react"
 
 
 export default function SignupWizard() {
-    const [step, setStep] = useState(1)
+    const [step, setStep] = useState(3)
     const [name, setName] = useState("")
-    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     const [phone, setPhone] = useState("")
     const [otp, setOtp] = useState("")
+    const [register, setRegister] = useState<{ status?: number, loading: boolean }>()
 
     const nextStep = () => setStep((prev) => Math.min(prev + 1, 4))
     const prevStep = () => setStep((prev) => Math.max(prev - 1, 1))
@@ -52,10 +54,10 @@ export default function SignupWizard() {
                             placeholder="👤 Name"
                         />
                         <Input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="📧 Email"
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            placeholder="📧 password"
                         />
                         <Input
                             type="tel"
@@ -68,7 +70,7 @@ export default function SignupWizard() {
                             Next
                         </Button>
                         <Card className="max-w-md mx-auto text-center">
-                            <CardContent className="pt-6 space-y-4">
+                            <CardContent className="pt-1">
                                 <p className="text-sm text-muted-foreground">
                                     Already have an account ?
                                 </p>
@@ -83,7 +85,7 @@ export default function SignupWizard() {
                 {step === 2 && (
                     <div className="space-y-4">
                         <p className="text-sm text-muted-foreground">
-                            OTP sent to {email} and {phone}
+                            OTP sent to {password} and {phone}
                         </p>
                         <Input
                             value={otp}
@@ -119,25 +121,78 @@ export default function SignupWizard() {
                             <Button variant="secondary" onClick={prevStep}>
                                 Back
                             </Button>
-                            <Button onClick={nextStep}>Next</Button>
+                            <Button onClick={async (e) => {
+                                e.preventDefault()
+                                setRegister({ loading: true })
+                                nextStep()
+                                const res = await fetch("/api/register", {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify({
+                                        phone,
+                                        password,
+                                    }),
+                                });
+
+                                if (res.status === 200) {
+                                    res.json()
+                                    console.log("success")
+                                    setRegister({ loading: false, status: 200 })
+
+
+
+                                }
+                                else {
+                                    setRegister({ loading: false, status: res.status })
+                                    console.log("error")
+                                }
+                            }}>Next</Button>
+
                         </div>
+                    </div>
+                )}
+                {step === 4 && (
+                    <div className="flex flex-col items-center space-y-4">
+
+
+                        {register?.loading ? <div className="w-80 h-30  flex items-center justify-center flex-col">
+                            <p className="font-semibold text-lg text-center">Creating user & setting up the wallet...</p>
+                            <div>
+                                <LoaderCircle />
+                            </div>
+                        </div> : register?.status === 200 ? <div className="flex flex-col items-center space-y-4 w-80">
+                            <p className="font-semibold text-lg text-center">All Set!</p>
+                            <p className="text-sm text-muted-foreground text-center">
+                                Your wallet is ready to use.
+                            </p>
+                            <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                <Check className="w-6 h-6 rounded text-white" />
+                            </div>
+                            <Button className="w-full mt-2" onClick={async () => {
+                                await signIn("credentials", {
+                                    phone,
+                                    password,
+                                    callbackUrl: "/dashboard",
+                                });
+
+                            }}>
+                                Start Using Wallet
+                            </Button>
+
+                        </div> : <><p className="text-sm text-red-400 text-center mt-2 w-80">
+                            {"Failed To Setup. Please try again"}
+                        </p>
+                            <Button variant="secondary" onClick={prevStep}>
+                                Back
+                            </Button>
+
+                        </>}
                     </div>
                 )}
 
-                {step === 4 && (
-                    <div className="flex flex-col items-center space-y-4">
-                        <p className="font-semibold text-lg text-center">All Set!</p>
-                        <p className="text-sm text-muted-foreground text-center">
-                            Your wallet is ready to use.
-                        </p>
-                        <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                            <Check className="w-6 h-6 text-white" />
-                        </div>
-                        <Button className="w-full mt-2" onClick={() => { location.href = "/dashboard" }}>
-                            Start Using Wallet
-                        </Button>
-                    </div>
-                )}
+
             </div>
         </div>
     )

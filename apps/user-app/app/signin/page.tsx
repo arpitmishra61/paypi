@@ -69,7 +69,8 @@ export default function () {
                             </Button>
                             <br />
 
-                            <Button variant="link" className="p-0" onClick={async () => {
+                            <Button className="p-2" onClick={async (e) => {
+                                e.preventDefault()
                                 await signIn("credentials", {
                                     phone: "1111111111",
                                     password: "password123",
