@@ -5,11 +5,16 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { signOut } from "next-auth/react";
+import { useUser } from "@repo/store/useUser"
 
 export function ProfileTab() {
-    const [name, setName] = useState("John Doe")
-    const [email, setEmail] = useState("john@example.com")
-    const [phone, setPhone] = useState("9876543210")
+
+    const { user } = useUser() as unknown as {
+        user: { name: string, email: string, id: string, phone: string }
+    }
+    const [name, setName] = useState(user.name)
+    const [email, setEmail] = useState(user.email)
+    const [phone, setPhone] = useState(user.phone)
     const [isEditing, setIsEditing] = useState(false)
 
     const handleEditToggle = () => setIsEditing(!isEditing)
@@ -38,7 +43,7 @@ export function ProfileTab() {
             </Button>
 
             {/* Profile Form */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4">
                 <div>
                     <label className="text-sm font-medium">Name</label>
                     <Input
@@ -64,7 +69,7 @@ export function ProfileTab() {
                         type="tel"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
-                        disabled={!isEditing}
+                        disabled
                     />
                 </div>
             </div>

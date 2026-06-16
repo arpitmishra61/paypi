@@ -10,9 +10,10 @@ import { signIn } from "next-auth/react"
 
 
 export default function SignupWizard() {
-    const [step, setStep] = useState(3)
+    const [step, setStep] = useState(1)
     const [name, setName] = useState("")
     const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("")
     const [phone, setPhone] = useState("")
     const [otp, setOtp] = useState("")
     const [register, setRegister] = useState<{ status?: number, loading: boolean }>()
@@ -57,13 +58,19 @@ export default function SignupWizard() {
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            placeholder="📧 password"
+                            placeholder="🔑 password"
                         />
                         <Input
                             type="tel"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             placeholder="📱 Phone Number"
+                        />
+                        <Input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="📧  Email"
                         />
 
                         <Button onClick={nextStep} className="w-full mt-4">
@@ -83,7 +90,7 @@ export default function SignupWizard() {
                 )}
 
                 {step === 2 && (
-                    <div className="space-y-4">
+                    <div className="space-y-4 w-80 h-30">
                         <p className="text-sm text-muted-foreground">
                             OTP sent to {password} and {phone}
                         </p>
@@ -133,6 +140,8 @@ export default function SignupWizard() {
                                     body: JSON.stringify({
                                         phone,
                                         password,
+                                        name,
+                                        email
                                     }),
                                 });
 

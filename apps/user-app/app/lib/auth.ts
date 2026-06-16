@@ -18,8 +18,6 @@ export const authOptions = {
 
       async authorize(credentials: any) {
         // Do zod validation, OTP validation here
-        const hashedPassword = await bcrypt.hash(credentials.password, 10);
-        console.log(credentials);
         const existingUser = await db.user.findFirst({
           where: {
             phone: credentials.phone,
@@ -29,7 +27,7 @@ export const authOptions = {
         if (existingUser) {
           const passwordValidation = await bcrypt.compare(
             credentials.password,
-            hashedPassword,
+            existingUser.password,
           );
 
           if (passwordValidation) {
@@ -49,10 +47,17 @@ export const authOptions = {
   ],
   secret: process.env.JWT_SECRET || "secret",
   callbacks: {
+    async jwt({ token, user }: any) {
+      if (user) {
+        token.phone = user.phone;
+      }
+
+      return token;
+    },
     // TODO: can u fix the type here? Using any is bad
     async session({ token, session }: any) {
       session.user.id = token.sub;
-
+      session.user.phone = token.phone;
       return session;
     },
   },

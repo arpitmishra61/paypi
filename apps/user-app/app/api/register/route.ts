@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import db from "@repo/db/client";
 export async function POST(req: Request) {
-  const { phone, password } = await req.json();
+  const { phone, password, name, email } = await req.json();
 
   const existingUser = await db.user.findFirst({
     where: { phone },
@@ -17,6 +17,11 @@ export async function POST(req: Request) {
     data: {
       phone,
       password: hashedPassword,
+      name,
+      email,
+      balance: {
+        create: { amount: 10000 },
+      },
     },
   });
 
