@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { signIn } from "next-auth/react";
@@ -10,20 +11,34 @@ import { Card, CardContent } from "@/components/ui/card"
 
 
 export default function () {
-
+    const router = useRouter()
     const [password, setPassword] = useState("")
     const [phone, setPhone] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+        setLoading(true)
+        setError("")
 
         const formData = new FormData(e.currentTarget);
 
-        await signIn("credentials", {
+        const result = await signIn("credentials", {
             phone: formData.get("phone"),
             password: formData.get("password"),
-            callbackUrl: "/dashboard",
+            redirect: false
         });
+
+        if (result?.error) {
+            setError("Invalid phone number or password")
+            setLoading(false)
+        } else if (result?.ok) {
+            router.push("/dashboard")
+        } else {
+            setError("Authentication failed. Please try again.")
+            setLoading(false)
+        }
     }
 
 
@@ -39,12 +54,18 @@ export default function () {
                     </div>
 
                     <div className="space-y-4">
+                        {error && (
+                            <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                                {error}
+                            </div>
+                        )}
                         <Input
                             type="tel"
                             name="phone"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             placeholder="📱 Phone Number"
+                            disabled={loading}
                         />
                         <Input
                             type="password"
@@ -52,10 +73,11 @@ export default function () {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="🔑 Password"
+                            disabled={loading}
                         />
 
-                        <Button className="w-full mt-4" type="submit">
-                            SignIn
+                        <Button className="w-full mt-4" type="submit" disabled={loading}>
+                            {loading ? "Signing in..." : "SignIn"}
                         </Button>
                     </div>
                     <Card className="max-w-md mx-auto text-center">
@@ -71,13 +93,23 @@ export default function () {
 
                             <Button className="p-2 cursor-pointer" variant={"link"} onClick={async (e) => {
                                 e.preventDefault()
-                                await signIn("credentials", {
+                                setLoading(true)
+                                setError("")
+                                const result = await signIn("credentials", {
                                     phone: "1111111111",
                                     password: "password123",
-                                    callbackUrl: "/dashboard",
+                                    redirect: false
                                 });
-
-                            }}>
+                                if (result?.error) {
+                                    setError("Invalid credentials")
+                                    setLoading(false)
+                                } else if (result?.ok) {
+                                    router.push("/dashboard")
+                                } else {
+                                    setError("Authentication failed")
+                                    setLoading(false)
+                                }
+                            }} disabled={loading}>
                                 Login As Guest (For Testing)
                             </Button>
                         </CardContent>
