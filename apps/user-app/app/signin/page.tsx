@@ -61,11 +61,15 @@ export default function () {
                         )}
                         <Input
                             type="tel"
+                            inputMode="numeric"
                             name="phone"
                             value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
+                            onChange={(e) => setPhone(e.target.value.replace(/\D/g, ""))}
                             placeholder="📱 Phone Number"
                             disabled={loading}
+                            pattern="[0-9]*"
+                            maxLength={10}
+
                         />
                         <Input
                             type="password"
