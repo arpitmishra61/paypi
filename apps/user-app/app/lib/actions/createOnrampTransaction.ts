@@ -7,7 +7,7 @@ import { authOptions } from "../auth";
 export async function createOnRampTransaction(
   bankId: number,
   amount: number,
-  token: string
+  token: string,
 ) {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
@@ -33,9 +33,10 @@ export async function createOnRampTransaction(
           rUrl: "/",
           token: "",
         }),
-      2000
+      2000,
     );
   })) as Record<"secretToken" | "rUrl" | "token", string>;
+  console.log(amount, userId);
   const txn = await prisma.appTransaction.create({
     data: {
       userId: +userId,

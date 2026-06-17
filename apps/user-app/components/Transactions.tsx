@@ -137,7 +137,7 @@ export default function ({ userId, from, to }: { userId: string, from: number, t
             {transactions.map((t, count) => {
                 const isDebit = t.direction === "DEBIT"
                 const isPending = t.status === "PENDING"
-                console.log(isPending)
+                const amount = Number(t.amount).toLocaleString("en-IN")
 
                 return <><div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -161,17 +161,17 @@ export default function ({ userId, from, to }: { userId: string, from: number, t
                     </div>
 
                     {isDebit ? !isPending ? <p className="text-sm font-semibold text-red-600">
-                        -₹{t.amount}
+                        -₹{amount}
                     </p> : <p className="text-sm font-semibold text-yellow-600">
-                        ₹{t.amount} <span className="text-xs text-muted  text-yellow-600">(processing)</span>
+                        ₹{amount} <span className="text-xs text-muted  text-yellow-600">(processing)</span>
                     </p> : !isPending ? <p className="text-sm font-semibold text-green-600">
-                        +₹{t.amount}
+                        +₹{amount}
                     </p> : <p className="text-sm font-semibold text-yellow-600">
-                        ₹{t.amount} <span className="text-xs text-muted  text-yellow-600">(processing)</span>
+                        ₹{amount} <span className="text-xs text-muted  text-yellow-600">(processing)</span>
                     </p>
                     }
                 </div>
-                    {count + 1 < totalTransactions && <Separator />}
+                    {count + 1 < (totalTransactions || 0) && <Separator />}
                 </>
             })}
         </div>

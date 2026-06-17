@@ -21,12 +21,12 @@ app.post("/web-hook", async (req, res) => {
     await db.$transaction([
       db.balance.updateMany({
         where: {
-          userId: Number(paymentInformation.userId),
+          userId: Number(paymentInformation.userId.replaceAll(",", "")),
         },
         data: {
           amount: {
             // You can also get this from your DB
-            increment: Number(paymentInformation.amount),
+            increment: Number(paymentInformation.amount.replaceAll(",", "")),
           },
         },
       }),

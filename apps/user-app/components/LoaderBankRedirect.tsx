@@ -6,6 +6,7 @@ import { createOnRampTransaction } from "@/app/lib/actions/createOnrampTransacti
 import PaymentStatus from "./PaymentStatus"
 
 
+
 export default function RedirectingScreen({ bank, amount, user }: any) {
     const paymentId = useRef<string | number>(0)
     const [done, setDone] = useState(false)
@@ -15,7 +16,7 @@ export default function RedirectingScreen({ bank, amount, user }: any) {
         async function redirectToBank() {
             const baseUrl = bank.redirectUrl;
 
-            const { id, message } = await createOnRampTransaction(bank.id, +amount, `onRamp_${Math.floor(Math.random() * 100)}`)
+            const { id, message } = await createOnRampTransaction(bank.id, +(amount.replaceAll(",", "")), `onRamp_${crypto.randomUUID()}`)
             const token = `${id}`
             console.log(id)
             if (token) {
