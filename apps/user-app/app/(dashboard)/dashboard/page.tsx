@@ -33,7 +33,7 @@ export default async function WalletCard() {
     }
 
     return (
-        <Card className="w-[480px] rounded-2xl shadow-lg dashboard max-w-sm">
+        <Card className="w-[480px] h-[500px] rounded-2xl shadow-lg dashboard max-w-sm">
             {/* Logo */}
             <CardHeader className="flex items-center justify-center py-1">
                 <div className="flex items-center gap-0.5 text-xl font-bold">
@@ -44,7 +44,7 @@ export default async function WalletCard() {
                 </div>
             </CardHeader>
 
-            <CardContent>
+            <CardContent className="flex-1 overflow-y-auto">
                 <Tabs defaultValue="dashboard" className="w-full">
                     {/* Tabs */}
                     <TabsList className="grid grid-cols-5 mb-4">

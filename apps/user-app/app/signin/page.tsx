@@ -69,7 +69,7 @@ export default function () {
                             </Button>
                             <br />
 
-                            <Button className="p-2" onClick={async (e) => {
+                            <Button className="p-2 cursor-pointer" variant={"link"} onClick={async (e) => {
                                 e.preventDefault()
                                 await signIn("credentials", {
                                     phone: "1111111111",
