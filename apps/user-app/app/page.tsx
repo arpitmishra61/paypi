@@ -10,5 +10,5 @@ export default async function Page() {
   if (user) {
     redirect("/dashboard")
   }
-  return redirect("/signup")
+  return redirect("/signin")
 }
